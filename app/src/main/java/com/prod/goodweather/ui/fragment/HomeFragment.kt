@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     }
 
     private var _binding: FragmentHomeBinding? = null
-    val binding
+    private val binding
         get() = _binding ?: throw RuntimeException("FragmentHomeBinding is null")
 
     override fun onAttach(context: Context) {
@@ -42,8 +42,18 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.currentLocation.observe(viewLifecycleOwner){
+            binding.minTemperatureLabel.text = "lat:{${it.latitude} lon: {${it.longitude}}"
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+    companion object {
+        fun newInstance() = HomeFragment()
     }
 }

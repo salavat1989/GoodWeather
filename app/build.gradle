@@ -50,4 +50,6 @@ dependencies {
     //Add dagger
     implementation 'com.google.dagger:dagger:2.41'
     kapt 'com.google.dagger:dagger-compiler:2.41'
+    // location
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }
