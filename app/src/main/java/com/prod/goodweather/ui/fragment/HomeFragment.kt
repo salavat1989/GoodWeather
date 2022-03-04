@@ -43,8 +43,9 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.currentLocation.observe(viewLifecycleOwner){
-            binding.minTemperatureLabel.text = "lat:{${it.latitude} lon: {${it.longitude}}"
+        viewModel.weather.observe(viewLifecycleOwner){
+            binding.cityName.text = it.name
+            binding.temperature.text = it.main.temp.toString()
         }
         super.onViewCreated(view, savedInstanceState)
     }

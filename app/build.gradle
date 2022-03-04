@@ -15,9 +15,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
+        debug {
+            def localProperties = new Properties()
+            localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+            buildConfigField("String", "MY_OW_API_KEY", localProperties['MY_OW_API_KEY'])
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -52,4 +58,19 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.41'
     // location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+    // retrofit2 gson
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    //coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+
+    def lifecycle_version = "2.4.1"
+    def arch_version = "2.1.0"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 }

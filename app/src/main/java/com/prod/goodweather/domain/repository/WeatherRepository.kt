@@ -1,7 +1,8 @@
 package com.prod.goodweather.domain.repository
 
-import com.prod.goodweather.domain.repository.entity.LocationEntity
+import com.prod.goodweather.data.network.model.CurrentWeatherDto
+import com.prod.goodweather.domain.entity.LocationEntity
 
 interface WeatherRepository {
-    fun getCurrentLocation(): LocationEntity
+    suspend fun getCurrentWeather(locationEntity: LocationEntity): CurrentWeatherDto
 }
