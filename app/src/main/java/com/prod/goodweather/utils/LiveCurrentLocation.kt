@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.prod.goodweather.domain.entity.LocationEntity
+import com.prod.goodweather.data.network.model.LocationEntity
 import javax.inject.Inject
 
 class LiveCurrentLocation @Inject constructor(

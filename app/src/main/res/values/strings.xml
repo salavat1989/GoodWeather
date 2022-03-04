@@ -2,9 +2,9 @@
     <string name="app_name">GoodWeather</string>
     <string name="home">Home</string>
     <string name="min_max_temperature">min: %s, max: %s</string>
-    <string name="weather_icon">weather_icon</string>
+    <string name="weather_icon" translatable="false">weather_icon</string>
     <string name="search">Search</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="fine_location_permission_rationale">The fine location permission is needed for core functionality.</string>
     <string name="fine_permission_denied_explanation">Fine location permission was denied but is needed for core functionality.</string>
     <string name="permission_approved_explanation">You approved FINE location, carry (and click) on!</string>

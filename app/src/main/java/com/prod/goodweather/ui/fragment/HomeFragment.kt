@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.prod.goodweather.R
 import com.prod.goodweather.databinding.FragmentHomeBinding
 import com.prod.goodweather.ui.GoodWeatherApp
 import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
+import com.squareup.picasso.Picasso
+import java.util.*
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -36,16 +39,20 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val current = resources.configuration.locales.get(0).language
         viewModel.weather.observe(viewLifecycleOwner){
-            binding.cityName.text = it.name
-            binding.temperature.text = it.main.temp.toString()
+            binding.tvCityName.text = it.cityName
+            binding.tvTemperature.text = it.temperature+"\u00B0"
+            binding.tvWeatherDescription.text = it.weatherDescription
+            binding.tvMinMaxTemperature.text = String.format(this.getString(R.string.min_max_temperature),it.minTemperature+"\u00B0",it.maxTemperature+"\u00B0")
+            Picasso.get().load(it.iconUrl).into(binding.imWeatherIcon)
         }
         super.onViewCreated(view, savedInstanceState)
     }
