@@ -46,13 +46,15 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val current = resources.configuration.locales.get(0).language
         viewModel.weather.observe(viewLifecycleOwner){
-            binding.tvCityName.text = it.cityName
-            binding.tvTemperature.text = it.temperature+"\u00B0"
+            binding.tvTemperature.text = "${it.temperature}\u00B0"
             binding.tvWeatherDescription.text = it.weatherDescription
             binding.tvMinMaxTemperature.text = String.format(this.getString(R.string.min_max_temperature),it.minTemperature+"\u00B0",it.maxTemperature+"\u00B0")
             Picasso.get().load(it.iconUrl).into(binding.imWeatherIcon)
+        }
+        viewModel.address.observe(viewLifecycleOwner){
+            binding.tvCityName.text = it.mainAddress
+            binding.tvAddress.text = it.subAddress
         }
         super.onViewCreated(view, savedInstanceState)
     }

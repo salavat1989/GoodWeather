@@ -1,14 +1,16 @@
 package com.prod.goodweather.data.mapper
 
 import com.prod.goodweather.data.network.model.CurrentWeatherDto
+import com.prod.goodweather.data.network.model.LocalityAddressDto
 import com.prod.goodweather.domain.entity.CurrentWeather
+import com.prod.goodweather.domain.entity.LocalityAddress
 import javax.inject.Inject
 
 class WeatherMapper @Inject constructor() {
-    fun mapCurrentWeatherDtoToEntity(dto:CurrentWeatherDto):CurrentWeather{
-        var weatherDescription : String? = null
-        var iconUrl : String? = null
-        if(dto.weather.size>0){
+    fun mapCurrentWeatherDtoToEntity(dto: CurrentWeatherDto): CurrentWeather {
+        var weatherDescription: String? = null
+        var iconUrl: String? = null
+        if (dto.weather.size > 0) {
             weatherDescription = dto.weather[0].description.replaceFirstChar { it.uppercaseChar() }
             iconUrl = "https://openweathermap.org/img/wn/${dto.weather[0].icon}@2x.png"
         }
@@ -21,5 +23,10 @@ class WeatherMapper @Inject constructor() {
             weatherDescription = weatherDescription,
             iconUrl = iconUrl
         )
+    }
+
+    fun mapLocalityAddressToEntity(dto: LocalityAddressDto): LocalityAddress {
+        val mainAddress = dto.locality?: dto.subAdminArea?: dto.adminArea?: dto.countryName
+        return LocalityAddress(mainAddress, dto.thoroughfare)
     }
 }
