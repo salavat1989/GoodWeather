@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">GoodWeather</string>
     <string name="home">Домой</string>
-    <string name="min_max_temperature">мин: %s, макс: %s</string>
+    <string name="min_max_temperature">Мин: %s, макс: %s</string>
     <string name="search">Поиск</string>
     <string name="fine_location_permission_rationale">Разрешение на точное местоположение необходимо для основной функциональности.</string>
     <string name="fine_permission_denied_explanation">В разрешении на точное местоположение было отказано, но оно необходимо для основной функциональности.</string>

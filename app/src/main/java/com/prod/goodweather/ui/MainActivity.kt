@@ -9,6 +9,7 @@ import com.prod.goodweather.databinding.ActivityMainBinding
 import com.prod.goodweather.ui.fragment.HomeFragment
 import com.prod.goodweather.utils.hasPermission
 import com.prod.goodweather.utils.requestPermissionWithRationale
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     var _binding: ActivityMainBinding? = null
@@ -16,15 +17,16 @@ class MainActivity : AppCompatActivity() {
         get() = _binding ?: throw RuntimeException("ActivityMainBinding is null")
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        launchFragment()
-        checkPermission()
-
+        if (!checkPermission()) {
+            permissionRequest()
+            waitPermission()
+        } else {
+            launchFragment()
+        }
     }
 
     override fun onDestroy() {
@@ -32,35 +34,45 @@ class MainActivity : AppCompatActivity() {
         _binding = null
     }
 
+    private fun waitPermission() {
+        thread {
+            Thread.sleep(5000)
+            if (checkPermission()) {
+                launchFragment()
+            } else {
+                runOnUiThread {
+                    waitPermission()
+                }
+            }
+        }
+    }
+
     private fun launchFragment() {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, HomeFragment.newInstance())
-            .addToBackStack(null)
             .commit()
     }
 
-    private fun checkPermission() {
-        val permissionApproved =
-            applicationContext.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    private fun checkPermission(): Boolean =
+        applicationContext.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 
-        if (!permissionApproved) {
-            val fineLocationRationalSnackbar = Snackbar.make(
-                    binding.fragmentContainer,
-                    R.string.fine_location_permission_rationale,
-                    Snackbar.LENGTH_LONG
-                ).setAction(R.string.ok) {
-                    requestPermissions(
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
-                    )
-                }
-            requestPermissionWithRationale(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
-                fineLocationRationalSnackbar
+    private fun permissionRequest() {
+        val fineLocationRationalSnackbar = Snackbar.make(
+            binding.fragmentContainer,
+            R.string.fine_location_permission_rationale,
+            Snackbar.LENGTH_LONG
+        ).setAction(R.string.ok) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
             )
         }
+        requestPermissionWithRationale(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
+            fineLocationRationalSnackbar
+        )
     }
 
 
