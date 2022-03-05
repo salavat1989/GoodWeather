@@ -8,12 +8,12 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.prod.goodweather.data.mapper.WeatherMapper
 import com.prod.goodweather.data.network.ApiService
-import com.prod.goodweather.data.network.model.CurrentWeatherDto
 import com.prod.goodweather.data.network.model.LocalityAddressDto
 import com.prod.goodweather.data.network.model.LocationEntity
+import com.prod.goodweather.data.network.model.WeatherDto
 import com.prod.goodweather.data.worker.AddressFromGeocoderWorker
-import com.prod.goodweather.domain.entity.CurrentWeather
 import com.prod.goodweather.domain.entity.LocalityAddress
+import com.prod.goodweather.domain.entity.Weather
 import com.prod.goodweather.domain.repository.WeatherRepository
 import com.prod.goodweather.utils.LiveCurrentLocation
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +28,7 @@ class WeatherRepositoryImpl @Inject constructor(
     private val application: Application,
 ) : WeatherRepository {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val currentLocationCurrentWeather = MutableLiveData<CurrentWeatherDto>()
+    private val currentLocationWeather = MutableLiveData<WeatherDto>()
     private var oldLocation: LocationEntity? = null
     private var address = MutableLiveData<LocalityAddressDto>()
     private val language = application.resources.configuration.locales.get(0).language
@@ -45,23 +45,24 @@ class WeatherRepositoryImpl @Inject constructor(
                     oldLocation = it
                     scope.launch {
                         val z = getCurrentWeather(it)
-                        currentLocationCurrentWeather.postValue(z)
+                        currentLocationWeather.postValue(z)
                     }
                 }
             }
         }
     }
-    private suspend fun getCurrentWeather(locationEntity: LocationEntity): CurrentWeatherDto {
-        return apiService.getCurrentWeather(
+
+    private suspend fun getCurrentWeather(locationEntity: LocationEntity): WeatherDto {
+        return apiService.getWeatherWithForecast(
             lon = locationEntity.longitude.toString(),
             lat = locationEntity.latitude.toString(),
             lang = language,
         )
     }
 
-    override fun getCurrentLocationCurrentWeather(): LiveData<CurrentWeather> {
-        return Transformations.map(currentLocationCurrentWeather) {
-            mapper.mapCurrentWeatherDtoToEntity(it)
+    override fun getCurrentLocationWeather(): LiveData<Weather> {
+        return Transformations.map(currentLocationWeather) {
+            mapper.mapWeatherDtoToEntity(it)
         }
     }
 

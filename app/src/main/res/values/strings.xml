@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GoodWeather</string>
     <string name="home">Home</string>
-    <string name="min_max_temperature">Min: %s, max: %s</string>
+    <string name="feels_like">Feels like %s</string>
     <string name="weather_icon" translatable="false">weather_icon</string>
     <string name="search">Search</string>
     <string name="ok" translatable="false">OK</string>

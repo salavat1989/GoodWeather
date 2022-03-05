@@ -112,6 +112,17 @@
             app:layout_constraintTop_toBottomOf="@+id/tvCityName"
             tools:src="@drawable/few_clouds" />
 
+
+
+        <TextView
+            android:id="@+id/tvFeelsLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTemperature"
+            tools:text="Feels like: -3\u00B0" />
         <TextView
             android:id="@+id/tvWeatherDescription"
             android:layout_width="wrap_content"
@@ -119,20 +130,8 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTemperature"
+            app:layout_constraintTop_toBottomOf="@id/tvFeelsLike"
             tools:text="light rain" />
-
-        <TextView
-            android:id="@+id/tvMinMaxTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWeatherDescription"
-            tools:text="min: -9\u00B0, max: -3\u00B0" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

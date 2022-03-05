@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiFactory {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+    const val IMAGE_URL_TEMPLATE = "https://openweathermap.org/img/wn/%s@2x.png"
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())

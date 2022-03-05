@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.prod.goodweather.R
@@ -13,7 +14,6 @@ import com.prod.goodweather.ui.GoodWeatherApp
 import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
 import com.squareup.picasso.Picasso
-import java.util.*
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -46,23 +46,42 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.weather.observe(viewLifecycleOwner){
+        viewModel.weather.observe(viewLifecycleOwner) {
             binding.tvTemperature.text = "${it.temperature}\u00B0"
-            binding.tvWeatherDescription.text = it.weatherDescription
-            binding.tvMinMaxTemperature.text = String.format(this.getString(R.string.min_max_temperature),it.minTemperature+"\u00B0",it.maxTemperature+"\u00B0")
+            setTextAndVisibility(
+                binding.tvWeatherDescription,
+                it.weatherDescription
+            )
+            setTextAndVisibility(
+                binding.tvFeelsLike,
+                String.format(this.getString(R.string.feels_like), it.feelsLike + "\u00B0")
+            )
             Picasso.get().load(it.iconUrl).into(binding.imWeatherIcon)
         }
-        viewModel.address.observe(viewLifecycleOwner){
+        viewModel.address.observe(viewLifecycleOwner) {
             binding.tvCityName.text = it.mainAddress
-            binding.tvAddress.text = it.subAddress
+            setTextAndVisibility(
+                binding.tvAddress,
+                it.subAddress
+            )
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun setTextAndVisibility(view: TextView, text: String?) {
+        if (text == null) {
+            view.visibility = View.GONE
+        } else {
+            view.text = text
+            view.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
     companion object {
         fun newInstance() = HomeFragment()
     }

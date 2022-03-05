@@ -2,7 +2,7 @@ package com.prod.goodweather.data.network
 
 import com.prod.goodweather.BuildConfig
 import com.prod.goodweather.data.network.model.CurrentWeatherDto
-import com.prod.goodweather.data.network.model.WeatherWithForecastDto
+import com.prod.goodweather.data.network.model.WeatherDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,6 +16,7 @@ interface ApiService {
         @Query(API_KEY) apiKey: String = BuildConfig.MY_OW_API_KEY,
     ): CurrentWeatherDto
 
+    @GET("onecall")
     suspend fun getWeatherWithForecast(
         @Query(LATITUDE) lat: String,
         @Query(LONGITUDE) lon: String,
@@ -23,7 +24,7 @@ interface ApiService {
         @Query(UNITS) units: String = METRIC,
         @Query(EXCLUDE) exclude: String = EXCLUDE_VALUE,
         @Query(API_KEY) apiKey: String = BuildConfig.MY_OW_API_KEY,
-    ): WeatherWithForecastDto
+    ): WeatherDto
 
     companion object {
         private const val LATITUDE = "lat"
