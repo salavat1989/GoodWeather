@@ -26,7 +26,7 @@ class HourlyWeatherAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: HourlyWeatherViewHolder, position: Int) {
         val item = getItem(position)
         with(holder.binding) {
-            tvTemperature.text = item.temperature
+            tvTemperature.text = "${item.temperature}\u00B0"
             tvTime.text = item.forecastTime
             Picasso.get().load(item.iconURL).into(imWeatherIcon)
         }
