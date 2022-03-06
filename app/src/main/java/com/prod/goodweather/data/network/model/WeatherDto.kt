@@ -7,11 +7,11 @@ data class WeatherDto(
     @SerializedName("alerts")
     val alerts: List<Alert?>?,
     @SerializedName("current")
-    val current: Current?,
+    val current: Current,
     @SerializedName("daily")
-    val daily: List<Daily?>?,
+    val daily: List<Daily>?,
     @SerializedName("hourly")
-    val hourly: List<Hourly?>?,
+    val hourly: List<Hourly>?,
     @SerializedName("lat")
     val lat: Double?, // 51.5098
     @SerializedName("lon")
@@ -56,7 +56,7 @@ data class WeatherDto(
         @SerializedName("sunset")
         val sunset: Long?, // 1646577563
         @SerializedName("temp")
-        val temp: Double?, // -2.86
+        val temp: Double, // -2.86
         @SerializedName("uvi")
         val uvi: Double?, // 0
         @SerializedName("visibility")
@@ -171,7 +171,7 @@ data class WeatherDto(
         @SerializedName("dew_point")
         val dewPoint: Double?, // -4.92
         @SerializedName("dt")
-        val dt: Long?, // 1646510400
+        val dt: Long, // 1646510400
         @SerializedName("feels_like")
         val feelsLike: Double?, // -9.86
         @SerializedName("humidity")
@@ -183,7 +183,7 @@ data class WeatherDto(
         @SerializedName("snow")
         val snow: Snow?,
         @SerializedName("temp")
-        val temp: Double?, // -2.86
+        val temp: Double, // -2.86
         @SerializedName("uvi")
         val uvi: Double?, // 0
         @SerializedName("visibility")

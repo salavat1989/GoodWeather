@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/empty_temp"
-            android:textSize="60sp"
+            android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAddress"
@@ -113,7 +113,6 @@
             tools:src="@drawable/few_clouds" />
 
 
-
         <TextView
             android:id="@+id/tvFeelsLike"
             android:layout_width="wrap_content"
@@ -123,6 +122,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTemperature"
             tools:text="Feels like: -3\u00B0" />
+
         <TextView
             android:id="@+id/tvWeatherDescription"
             android:layout_width="wrap_content"
@@ -133,6 +133,70 @@
             app:layout_constraintTop_toBottomOf="@id/tvFeelsLike"
             tools:text="light rain" />
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            app:cardBackgroundColor="@color/transparent_blue"
+            app:layout_constraintTop_toBottomOf="@id/tvWeatherDescription">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+
+                    android:id="@+id/imClockIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="3dp"
+                    android:contentDescription="@string/weather_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/ic_baseline_timer_24"
+                    tools:src="@drawable/ic_baseline_timer_24" />
+
+                <TextView
+                    android:id="@+id/tvHourlyForecastLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:text="@string/hourly_forecast"
+                    app:layout_constraintStart_toEndOf="@+id/imClockIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Hourly forecast" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_height="1px"
+                    android:background="@color/dark_blue"
+                    app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel"/>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+
+                    app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/rvHourlyWeather"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/hourly_weather_item" />
+                </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

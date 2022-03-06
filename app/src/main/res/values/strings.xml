@@ -10,4 +10,5 @@
     <string name="permission_approved_explanation">You approved FINE location, carry (and click) on!</string>
     <string name="cloud_image" translatable="false">cloud image</string>
     <string name="empty_temp" translatable="false">- -</string>
+    <string name="hourly_forecast">Hourly forecast</string>
 </resources>

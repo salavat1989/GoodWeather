@@ -6,4 +6,5 @@ data class Weather(
     val feelsLike: String,
     val weatherDescription: String?,
     val iconUrl: String?,
+    val listHourlyWeather: List<HourlyWeather>
 )

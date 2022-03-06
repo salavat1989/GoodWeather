@@ -12,4 +12,5 @@
     <color name="primary_blue">#FF2196f3</color>
     <color name="light_blue">#EE6ec6ff</color>
     <color name="dark_blue">#FF0069c0</color>
+    <color name="transparent_blue">#440069c0</color>
 </resources>

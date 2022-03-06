@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.prod.goodweather.R
 import com.prod.goodweather.databinding.FragmentHomeBinding
 import com.prod.goodweather.ui.GoodWeatherApp
+import com.prod.goodweather.ui.adapter.HourlyWeatherAdapter
 import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -23,6 +24,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject
+    lateinit var hourlyWeatherAdapter: HourlyWeatherAdapter
     private val viewModel: HomeFragmentViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[HomeFragmentViewModel::class.java]
     }
@@ -46,6 +50,16 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setRvAdapters()
+        setViewModelObserve()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun setRvAdapters() {
+        binding.rvHourlyWeather.adapter = hourlyWeatherAdapter
+    }
+
+    private fun setViewModelObserve() {
         viewModel.weather.observe(viewLifecycleOwner) {
             binding.tvTemperature.text = "${it.temperature}\u00B0"
             setTextAndVisibility(
@@ -57,6 +71,7 @@ class HomeFragment : Fragment() {
                 String.format(this.getString(R.string.feels_like), it.feelsLike + "\u00B0")
             )
             Picasso.get().load(it.iconUrl).into(binding.imWeatherIcon)
+            hourlyWeatherAdapter.submitList(it.listHourlyWeather)
         }
         viewModel.address.observe(viewLifecycleOwner) {
             binding.tvCityName.text = it.mainAddress
@@ -65,7 +80,6 @@ class HomeFragment : Fragment() {
                 it.subAddress
             )
         }
-        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setTextAndVisibility(view: TextView, text: String?) {
