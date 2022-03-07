@@ -4,6 +4,7 @@ import android.app.Application
 import com.prod.goodweather.data.network.ApiFactory
 import com.prod.goodweather.data.network.model.LocalityAddressDto
 import com.prod.goodweather.data.network.model.WeatherDto
+import com.prod.goodweather.domain.entity.DailyWeather
 import com.prod.goodweather.domain.entity.HourlyWeather
 import com.prod.goodweather.domain.entity.LocalityAddress
 import com.prod.goodweather.domain.entity.Weather
@@ -20,6 +21,7 @@ class WeatherMapper @Inject constructor(
         var weatherDescription: String? = null
         var iconUrl: String? = null
         val listHourlyWeather: MutableList<HourlyWeather> = mutableListOf()
+        val listDailyWeather: MutableList<DailyWeather> = mutableListOf()
         dto.current.let {
             it.feelsLike?.let { feelsLike = String.format("%.1f", it) }
             it.weather?.let {
@@ -40,28 +42,44 @@ class WeatherMapper @Inject constructor(
                 }
             }
         }
+        dto.daily?.let {
+            for (weather in it) {
+                listDailyWeather.add(
+                    mapDailyWeatherDtoToEntity(weather, dto.timezone ?: "UTC")
+                )
+            }
+        }
         return Weather(
             cityName = null,
             temperature = temperature,
             feelsLike = feelsLike,
             weatherDescription = weatherDescription,
             iconUrl = iconUrl,
-            listHourlyWeather = listHourlyWeather
+            listHourlyWeather = listHourlyWeather,
+            listDailyWeather = listDailyWeather,
         )
     }
 
     fun mapHourlyWeatherDtoToEntity(dto: WeatherDto.Hourly, timeZone: String): HourlyWeather {
         return HourlyWeather(
-            convertUnixTimeToString(dto.dt, timeZone),
-            String.format("%.0f", dto.temp),
-            dto.weather?.get(0)?.icon?.let { String.format(ApiFactory.IMAGE_URL_TEMPLATE, it) }
+            unixTime = dto.dt,
+            forecastTime = convertUnixTimeToString(dto.dt, timeZone,"HH"),
+            temperature = String.format("%.0f", dto.temp),
+            iconURL = dto.weather?.get(0)?.icon?.let { String.format(ApiFactory.IMAGE_URL_TEMPLATE, it) }
         )
     }
 
-    private fun convertUnixTimeToString(t: Long, timeZone: String): String {
-//        val dateFormat = DateFormat.getTimeFormat(application).
+    fun mapDailyWeatherDtoToEntity(dto: WeatherDto.Daily, timeZone: String): DailyWeather {
+        return DailyWeather(
+            unixTime = dto.dt,
+            forecastTime = convertUnixTimeToString(dto.dt, timeZone,"EEEE").replaceFirstChar { it.uppercaseChar() },
+            temperatureMin = String.format("%.0f", dto.temp.min),
+            temperatureMax = String.format("%.0f", dto.temp.max),
+            iconURL = dto.weather?.get(0)?.icon?.let { String.format(ApiFactory.IMAGE_URL_TEMPLATE, it) }
+        )
+    }
 
-        val template = "HH"
+    private fun convertUnixTimeToString(t: Long, timeZone: String,template :String): String {
         val dateFormat = SimpleDateFormat(template)
         val date = Date(t * 1000)
         try {

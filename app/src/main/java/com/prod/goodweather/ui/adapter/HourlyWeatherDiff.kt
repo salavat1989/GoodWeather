@@ -9,7 +9,7 @@ import com.prod.goodweather.domain.entity.HourlyWeather
 
 class HourlyWeatherDiff: DiffUtil.ItemCallback<HourlyWeather>() {
     override fun areItemsTheSame(oldItem: HourlyWeather, newItem: HourlyWeather): Boolean {
-        return oldItem.forecastTime == newItem.forecastTime
+        return oldItem.unixTime == newItem.unixTime
     }
 
     override fun areContentsTheSame(oldItem: HourlyWeather, newItem: HourlyWeather): Boolean {

@@ -11,4 +11,6 @@
     <string name="cloud_image" translatable="false">cloud image</string>
     <string name="empty_temp" translatable="false">- -</string>
     <string name="hourly_forecast">Hourly forecast</string>
+    <string name="calendar_icon" translatable="false">Calendar Icon</string>
+    <string name="daily_forecast">Daily forecast</string>
 </resources>

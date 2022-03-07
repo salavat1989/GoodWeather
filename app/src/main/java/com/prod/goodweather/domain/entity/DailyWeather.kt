@@ -1,8 +1,9 @@
 package com.prod.goodweather.domain.entity
 
-data class HourlyWeather(
+data class DailyWeather(
     val unixTime:Long,
     val forecastTime: String,
-    val temperature: String,
+    val temperatureMin: String,
+    val temperatureMax: String,
     val iconURL: String?,
 )

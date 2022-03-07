@@ -93,7 +93,7 @@ data class WeatherDto(
         @SerializedName("dew_point")
         val dewPoint: Double?, // -11.65
         @SerializedName("dt")
-        val dt: Long?, // 1646557200
+        val dt: Long, // 1646557200
         @SerializedName("feels_like")
         val feelsLike: FeelsLike?,
         @SerializedName("humidity")
@@ -115,7 +115,7 @@ data class WeatherDto(
         @SerializedName("sunset")
         val sunset: Long?, // 1646577563
         @SerializedName("temp")
-        val temp: Temp?,
+        val temp: Temp,
         @SerializedName("uvi")
         val uvi: Double?, // 2.88
         @SerializedName("weather")
@@ -144,9 +144,9 @@ data class WeatherDto(
             @SerializedName("eve")
             val eve: Double?, // -10.9
             @SerializedName("max")
-            val max: Double?, // -2.86
+            val max: Double, // -2.86
             @SerializedName("min")
-            val min: Double?, // -14.33
+            val min: Double, // -14.33
             @SerializedName("morn")
             val morn: Double?, // -9.91
             @SerializedName("night")
