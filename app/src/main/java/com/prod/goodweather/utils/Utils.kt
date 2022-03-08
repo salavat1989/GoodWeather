@@ -9,25 +9,29 @@ import com.google.android.material.snackbar.Snackbar
 
 fun Context.hasPermission(permission: String): Boolean {
 
-    if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION &&
-        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-        return true
-    }
+	if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION &&
+		android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
+	) {
+		return true
+	}
 
-    return ActivityCompat.checkSelfPermission(this, permission) ==
-            PackageManager.PERMISSION_GRANTED
+	return ActivityCompat.checkSelfPermission(this, permission) ==
+			PackageManager.PERMISSION_GRANTED
 }
+
+fun Context.checkAccessFineLocationPermission(): Boolean =
+	this.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 
 fun Activity.requestPermissionWithRationale(
     permission: String,
     requestCode: Int,
-    snackbar: Snackbar
+    snackbar: Snackbar,
 ) {
-    val provideRationale = shouldShowRequestPermissionRationale(permission)
+	val provideRationale = shouldShowRequestPermissionRationale(permission)
 
-    if (provideRationale) {
-        snackbar.show()
-    } else {
-        requestPermissions(arrayOf(permission), requestCode)
-    }
+	if (provideRationale) {
+		snackbar.show()
+	} else {
+		requestPermissions(arrayOf(permission), requestCode)
+	}
 }

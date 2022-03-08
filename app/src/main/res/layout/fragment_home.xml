@@ -186,13 +186,6 @@
                             android:background="@color/dark_blue"
                             app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel" />
 
-                        <!--                        <ScrollView-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:fillViewport="true"-->
-
-                        <!--                            app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel">-->
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvHourlyWeather"
                             android:layout_width="match_parent"
@@ -204,7 +197,6 @@
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel"
                             tools:listitem="@layout/hourly_weather_item" />
-                        <!--                        </ScrollView>-->
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 

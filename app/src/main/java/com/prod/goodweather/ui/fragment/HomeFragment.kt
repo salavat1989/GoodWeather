@@ -64,9 +64,10 @@ class HomeFragment : Fragment() {
 
 	private fun setRvAdapters() {
 		binding.rvHourlyWeather.adapter = hourlyWeatherAdapter
-		binding.rvDailyWeather.layoutManager = object: LinearLayoutManager(requireActivity().application) {
-			override fun canScrollVertically() = false
-		}
+		binding.rvDailyWeather.layoutManager =
+			object : LinearLayoutManager(requireActivity().application) {
+				override fun canScrollVertically() = false
+			}
 		binding.rvDailyWeather.adapter = dailyWeatherAdapter
 	}
 
@@ -106,9 +107,5 @@ class HomeFragment : Fragment() {
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding = null
-	}
-
-	companion object {
-		fun newInstance() = HomeFragment()
 	}
 }

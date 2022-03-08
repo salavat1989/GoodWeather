@@ -9,4 +9,5 @@
     <string name="permission_approved_explanation">Вы одобрили определение точного местоположения, продолжайте (и нажмите) дальше!</string>
     <string name="hourly_forecast">Почасовой прогноз</string>
     <string name="daily_forecast">Прогноз по дням</string>
+    <string name="enter_location_name">Введите название местоположения</string>
 </resources>
