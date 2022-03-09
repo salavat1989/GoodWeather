@@ -3,6 +3,7 @@ package com.prod.goodweather.di.module
 import androidx.lifecycle.ViewModel
 import com.prod.goodweather.di.annotation.ViewModelKey
 import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
+import com.prod.goodweather.ui.viewModel.SearchFragmentViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -13,4 +14,9 @@ interface ViewModelModule {
     @ViewModelKey(HomeFragmentViewModel::class)
     @Binds
     fun bindHomeFragmentViewModel(impl: HomeFragmentViewModel): ViewModel
+
+    @IntoMap
+    @ViewModelKey(SearchFragmentViewModel::class)
+    @Binds
+    fun bindSearchFragmentViewModel(impl: SearchFragmentViewModel): ViewModel
 }

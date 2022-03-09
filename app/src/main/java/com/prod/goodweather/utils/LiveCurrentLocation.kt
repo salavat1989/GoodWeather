@@ -9,12 +9,12 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.prod.goodweather.data.network.model.LocationEntity
+import com.prod.goodweather.domain.entity.LocationModel
 import javax.inject.Inject
 
 class LiveCurrentLocation @Inject constructor(
     application: Application,
-) : LiveData<LocationEntity>() {
+) : LiveData<LocationModel>() {
     private var fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
@@ -26,7 +26,7 @@ class LiveCurrentLocation @Inject constructor(
     }
 
     private fun setLocationData(location: Location) {
-        value = LocationEntity(
+        value = LocationModel(
             latitude = location.latitude,
             longitude = location.longitude
         )

@@ -1,10 +1,10 @@
-package com.prod.goodweather.data.network.model
+package com.prod.goodweather.domain.entity
 
-class LocationEntity(
+class LocationModel(
     val latitude: Double,
     val longitude: Double,
 ) {
-    fun isBigChange(old: LocationEntity?): Boolean {
+    fun isBigChange(old: LocationModel?): Boolean {
         return if (
             old == null
             || this.latitude > old.latitude + BIG_CHANGE
@@ -15,7 +15,7 @@ class LocationEntity(
             return true
         } else false
     }
-    fun isSmallChange(old: LocationEntity?): Boolean {
+    fun isSmallChange(old: LocationModel?): Boolean {
         return if (
             old == null
             || this.latitude > old.latitude + SMALL_CHANGE

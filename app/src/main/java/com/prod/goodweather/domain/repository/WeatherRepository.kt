@@ -1,12 +1,16 @@
 package com.prod.goodweather.domain.repository
 
-import androidx.lifecycle.LiveData
-import com.prod.goodweather.domain.entity.LocalityAddress
+import com.prod.goodweather.domain.entity.AddressModel
+import com.prod.goodweather.domain.entity.LocationModel
 import com.prod.goodweather.domain.entity.Weather
 
 interface WeatherRepository {
+    suspend fun getLocationAddress(location: LocationModel): AddressModel
 
-    fun getCurrentLocationWeather(): LiveData<Weather>
+    suspend fun getLocationWeather(location: LocationModel): Weather
 
-    fun getCurrentLocationAddress(): LiveData<LocalityAddress>
+
+
+    suspend fun getLocationsFromSubString(subString: String): List<AddressModel>
+
 }

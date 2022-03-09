@@ -6,6 +6,7 @@ import com.prod.goodweather.di.module.DataModule
 import com.prod.goodweather.di.module.DomainModule
 import com.prod.goodweather.di.module.ViewModelModule
 import com.prod.goodweather.ui.fragment.HomeFragment
+import com.prod.goodweather.ui.fragment.SearchFragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -17,6 +18,7 @@ import dagger.Component
 ])
 interface ApplicationComponent {
     fun inject(fragment: HomeFragment)
+    fun inject(fragment: SearchFragment)
 
     @Component.Factory
     interface Factory {

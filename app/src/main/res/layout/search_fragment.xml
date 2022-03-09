@@ -15,26 +15,18 @@
         app:startIconDrawable="@drawable/outline_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tvSearchResult"
-        app:layout_constraintTop_toBottomOf="@+id/tilSearch"
-        android:padding="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:background="@color/white"
-        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchResult"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSearchResult"
+        app:layout_constraintTop_toBottomOf="@+id/tilSearch"
         tools:listitem="@layout/search_result_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
