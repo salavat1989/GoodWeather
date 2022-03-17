@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.prod.goodweather.R
 import com.prod.goodweather.databinding.FragmentHomeBinding
-import com.prod.goodweather.ui.BaseFragment
 import com.prod.goodweather.ui.GoodWeatherApp
 import com.prod.goodweather.ui.adapter.DailyWeatherAdapter
 import com.prod.goodweather.ui.adapter.HourlyWeatherAdapter
@@ -20,10 +19,13 @@ import com.prod.goodweather.ui.viewModel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment() {
-//	protected val component by lazy {
-//		(requireActivity().application as GoodWeatherApp).component
-//	}
+class HomeFragment : Fragment() {
+	@Inject
+	lateinit var viewModelFactory: ViewModelFactory
+
+	private val component by lazy {
+		(requireActivity().application as GoodWeatherApp).component
+	}
 
 	@Inject
 	lateinit var hourlyWeatherAdapter: HourlyWeatherAdapter

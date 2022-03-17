@@ -3,7 +3,7 @@ package com.prod.goodweather.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.prod.goodweather.databinding.DailyWeatherItemBinding
+import com.prod.goodweather.databinding.ItemDailyWeatherBinding
 import com.prod.goodweather.domain.entity.DailyWeather
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
@@ -12,9 +12,10 @@ import javax.inject.Inject
  * Created by Kadyrov Salavat on 07.03.2022
  */
 
-class DailyWeatherAdapter @Inject constructor() : ListAdapter<DailyWeather, DailyWeatherViewHolder>(DailyWeatherDiff()) {
+class DailyWeatherAdapter @Inject constructor() :
+	ListAdapter<DailyWeather, DailyWeatherViewHolder>(DailyWeatherDiff()) {
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyWeatherViewHolder {
-		val binding = DailyWeatherItemBinding.inflate(
+		val binding = ItemDailyWeatherBinding.inflate(
 			LayoutInflater.from(parent.context),
 			parent,
 			false

@@ -16,7 +16,8 @@
         android:id="@+id/imWeatherIcon"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        tools:src="@drawable/few_clouds" />
+        tools:src="@drawable/few_clouds"
+        android:contentDescription="@string/weather_icon"/>
 
     <TextView
         android:id="@+id/tvMinTemp"

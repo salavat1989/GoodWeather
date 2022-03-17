@@ -6,19 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.prod.goodweather.databinding.SearchFragmentBinding
-import com.prod.goodweather.ui.BaseFragment
+import com.prod.goodweather.databinding.FragmentSearchBinding
+import com.prod.goodweather.ui.GoodWeatherApp
 import com.prod.goodweather.ui.adapter.LocationSearchResultAdapter
 import com.prod.goodweather.ui.viewModel.SearchFragmentViewModel
+import com.prod.goodweather.ui.viewModel.ViewModelFactory
 import javax.inject.Inject
 
 /**
  * Created by Kadyrov Salavat on 07.03.2022
  */
 
-class SearchFragment : BaseFragment() {
-	private var _binding: SearchFragmentBinding? = null
+
+class SearchFragment : Fragment() {
+	@Inject
+	lateinit var viewModelFactory: ViewModelFactory
+
+	private val component by lazy {
+		(requireActivity().application as GoodWeatherApp).component
+	}
+	private var _binding: FragmentSearchBinding? = null
 	val binding
 		get() = _binding ?: throw RuntimeException("SearchFragmentBinding is null")
 
@@ -39,7 +48,7 @@ class SearchFragment : BaseFragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?,
 	): View? {
-		_binding = SearchFragmentBinding.inflate(layoutInflater, container, false)
+		_binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
 		return binding.root
 	}
 

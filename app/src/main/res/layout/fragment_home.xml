@@ -196,7 +196,7 @@
                             android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintTop_toBottomOf="@+id/tvHourlyForecastLabel"
-                            tools:listitem="@layout/hourly_weather_item" />
+                            tools:listitem="@layout/item_hourly_weather" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -255,7 +255,7 @@
                             android:layout_marginBottom="10dp"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintTop_toBottomOf="@+id/tvDailyForecastLabel"
-                            tools:listitem="@layout/daily_weather_item" />
+                            tools:listitem="@layout/item_daily_weather" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>

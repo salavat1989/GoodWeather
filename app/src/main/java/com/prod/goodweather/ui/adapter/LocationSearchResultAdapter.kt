@@ -3,9 +3,8 @@ package com.prod.goodweather.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.prod.goodweather.databinding.SearchResultItemBinding
+import com.prod.goodweather.databinding.ItemSearchResultBinding
 import com.prod.goodweather.domain.entity.AddressModel
-import com.prod.goodweather.domain.entity.LocationModel
 import javax.inject.Inject
 
 /**
@@ -18,7 +17,7 @@ class LocationSearchResultAdapter @Inject constructor() :
 		parent: ViewGroup,
 		viewType: Int,
 	): LocationSearchResultViewHolder {
-		val binding = SearchResultItemBinding.inflate(LayoutInflater.from(parent.context),
+		val binding = ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context),
 			parent,
 			false
 		)
