@@ -63,35 +63,41 @@ class HomeFragment : Fragment() {
 	}
 
 	private fun setRvAdapters() {
-		binding.rvHourlyWeather.adapter = hourlyWeatherAdapter
-		binding.rvDailyWeather.layoutManager =
-			object : LinearLayoutManager(requireActivity().application) {
-				override fun canScrollVertically() = false
-			}
-		binding.rvDailyWeather.adapter = dailyWeatherAdapter
+		with(binding.detailWeather) {
+			rvHourlyWeather.adapter = hourlyWeatherAdapter
+			rvDailyWeather.layoutManager =
+				object : LinearLayoutManager(requireActivity().application) {
+					override fun canScrollVertically() = false
+				}
+			rvDailyWeather.adapter = dailyWeatherAdapter
+		}
+
 	}
 
 	private fun setViewModelObserve() {
 		viewModel.weather.observe(viewLifecycleOwner) {
-			binding.tvTemperature.text = "${it.temperature}\u00B0"
-			setTextAndVisibility(
-				binding.tvWeatherDescription,
-				it.weatherDescription
-			)
-			setTextAndVisibility(
-				binding.tvFeelsLike,
-				String.format(this.getString(R.string.feels_like), it.feelsLike + "\u00B0")
-			)
-			Picasso.get().load(it.iconUrl).into(binding.imWeatherIcon)
-			hourlyWeatherAdapter.submitList(it.listHourlyWeather)
-			dailyWeatherAdapter.submitList(it.listDailyWeather)
-		}
-		viewModel.address.observe(viewLifecycleOwner) {
-			binding.tvCityName.text = it.mainAddress
-			setTextAndVisibility(
-				binding.tvAddress,
-				it.subAddress
-			)
+			with(binding.detailWeather) {
+				tvTemperature.text = "${it.temperature}\u00B0"
+				setTextAndVisibility(
+					tvWeatherDescription,
+					it.weatherDescription
+				)
+				setTextAndVisibility(
+					tvFeelsLike,
+					String.format(requireActivity().getString(R.string.feels_like),
+						it.feelsLike + "\u00B0")
+				)
+				Picasso.get().load(it.iconUrl).into(imWeatherIcon)
+				hourlyWeatherAdapter.submitList(it.listHourlyWeather)
+				dailyWeatherAdapter.submitList(it.listDailyWeather)
+				viewModel.address.observe(viewLifecycleOwner) {
+					tvCityName.text = it.mainAddress
+					setTextAndVisibility(
+						tvAddress,
+						it.subAddress
+					)
+				}
+			}
 		}
 	}
 
