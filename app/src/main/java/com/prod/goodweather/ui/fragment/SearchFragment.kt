@@ -9,7 +9,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.prod.goodweather.databinding.FragmentSearchBinding
+import com.prod.goodweather.domain.entity.AddressModel
 import com.prod.goodweather.ui.GoodWeatherApp
+import com.prod.goodweather.ui.MainActivity
 import com.prod.goodweather.ui.adapter.LocationSearchResultAdapter
 import com.prod.goodweather.ui.viewModel.SearchFragmentViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
@@ -24,8 +26,9 @@ class SearchFragment : Fragment() {
 	@Inject
 	lateinit var viewModelFactory: ViewModelFactory
 
-	private val component by lazy {
+	val component by lazy {
 		(requireActivity().application as GoodWeatherApp).component
+			.getFragmentComponentFactory().create(null)
 	}
 	private var _binding: FragmentSearchBinding? = null
 	val binding
@@ -68,7 +71,16 @@ class SearchFragment : Fragment() {
 	}
 
 	private fun setRvAdapter() {
+		locationSearchResultAdapter.onClick = {
+			launchBottomSheet(it)
+		}
 		binding.rvSearchResult.adapter = locationSearchResultAdapter
+	}
+
+	private fun launchBottomSheet(address: AddressModel) {
+		val action = SearchFragmentDirections
+			.actionSearchFragmentToSearchResultBottomSheet(address)
+		(requireActivity() as MainActivity).navController.navigate(action)
 	}
 
 	override fun onDestroy() {

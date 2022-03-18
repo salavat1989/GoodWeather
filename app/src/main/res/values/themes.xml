@@ -14,5 +14,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.GoodWeather.BottomSheetDialog</item>
+
+    </style>
+    <style name="ThemeOverlay.GoodWeather.BottomSheetDialog"
+        parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>
 </resources>

@@ -1,32 +1,43 @@
 package com.prod.goodweather.ui.fragment
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.prod.goodweather.R
-import com.prod.goodweather.databinding.FragmentHomeBinding
+import com.prod.goodweather.databinding.ModalBottomSheetBinding
 import com.prod.goodweather.ui.GoodWeatherApp
 import com.prod.goodweather.ui.adapter.DailyWeatherAdapter
 import com.prod.goodweather.ui.adapter.HourlyWeatherAdapter
-import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
+import com.prod.goodweather.ui.viewModel.SearchResultBottomSheetViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class HomeFragment : Fragment() {
+
+/**
+ * Created by Kadyrov Salavat on 17.03.2022
+ */
+
+class SearchResultBottomSheet : BottomSheetDialogFragment() {
 	@Inject
 	lateinit var viewModelFactory: ViewModelFactory
 
-	val component by lazy {
-		(requireActivity().application as GoodWeatherApp).component
-			.getFragmentComponentFactory().create(null)
+	private val viewModel: SearchResultBottomSheetViewModel by lazy {
+		ViewModelProvider(this, viewModelFactory)[SearchResultBottomSheetViewModel::class.java]
 	}
+
+	private val args by navArgs<SearchResultBottomSheetArgs>()
 
 	@Inject
 	lateinit var hourlyWeatherAdapter: HourlyWeatherAdapter
@@ -34,14 +45,14 @@ class HomeFragment : Fragment() {
 	@Inject
 	lateinit var dailyWeatherAdapter: DailyWeatherAdapter
 
-
-	private val viewModel: HomeFragmentViewModel by lazy {
-		ViewModelProvider(this, viewModelFactory)[HomeFragmentViewModel::class.java]
-	}
-
-	private var _binding: FragmentHomeBinding? = null
+	private var _binding: ModalBottomSheetBinding? = null
 	private val binding
-		get() = _binding ?: throw RuntimeException("FragmentHomeBinding is null")
+		get() = _binding ?: throw RuntimeException("ModalBottomSheetBinding is null")
+
+	val component by lazy {
+		(requireActivity().application as GoodWeatherApp).component
+			.getFragmentComponentFactory().create(args.addressModel)
+	}
 
 	override fun onAttach(context: Context) {
 		component.inject(this)
@@ -53,15 +64,28 @@ class HomeFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?,
 	): View? {
-		_binding = FragmentHomeBinding.inflate(layoutInflater)
+		_binding = ModalBottomSheetBinding.inflate(layoutInflater)
+
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		Log.d("onViewCreated", "onViewCreated")
+		val parentView = binding.root.parent as View
+		val bottomSheetBehavior = BottomSheetBehavior.from(parentView)
+		bottomSheetBehavior.peekHeight = getSheetHeight()
+		binding.frameLayout.layoutParams = FrameLayout
+			.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getSheetHeight())
+
+		Log.d("onViewCreated", binding.frameLayout.height.toString())
+		Log.d("onViewCreated", binding.detailWeather.root.height.toString())
+		setAddress()
 		setRvAdapters()
 		setViewModelObserve()
 		super.onViewCreated(view, savedInstanceState)
 	}
+
+	private fun getSheetHeight() = (Resources.getSystem().displayMetrics.heightPixels * 0.9).toInt()
 
 	private fun setRvAdapters() {
 		with(binding.detailWeather) {
@@ -91,13 +115,6 @@ class HomeFragment : Fragment() {
 				Picasso.get().load(it.iconUrl).into(imWeatherIcon)
 				hourlyWeatherAdapter.submitList(it.listHourlyWeather)
 				dailyWeatherAdapter.submitList(it.listDailyWeather)
-				viewModel.address.observe(viewLifecycleOwner) {
-					tvCityName.text = it.mainAddress
-					setTextAndVisibility(
-						tvAddress,
-						it.subAddress
-					)
-				}
 			}
 		}
 	}
@@ -111,8 +128,16 @@ class HomeFragment : Fragment() {
 		}
 	}
 
+	private fun setAddress() {
+		binding.detailWeather.tvCityName.text = args.addressModel.mainAddress
+	}
+
 	override fun onDestroy() {
-		super.onDestroy()
 		_binding = null
+		super.onDestroy()
+	}
+
+	companion object {
+		const val TAG = "ModalBottomSheet"
 	}
 }

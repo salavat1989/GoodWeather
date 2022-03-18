@@ -1,9 +1,13 @@
 package com.prod.goodweather.domain.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 class LocationModel(
     val latitude: Double,
     val longitude: Double,
-) {
+) : Parcelable {
     fun isBigChange(old: LocationModel?): Boolean {
         return if (
             old == null

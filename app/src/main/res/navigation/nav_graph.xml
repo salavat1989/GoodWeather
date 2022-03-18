@@ -14,5 +14,18 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.prod.goodweather.ui.fragment.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultBottomSheet"
+            app:destination="@id/searchResultBottomSheet"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <dialog
+        android:id="@+id/searchResultBottomSheet"
+        android:name="com.prod.goodweather.ui.fragment.SearchResultBottomSheet"
+        android:label="SearchResultBottomSheet" >
+        <argument
+            android:name="addressModel"
+            app:argType="com.prod.goodweather.domain.entity.AddressModel" />
+    </dialog>
 </navigation>
