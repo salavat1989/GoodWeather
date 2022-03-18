@@ -3,7 +3,6 @@ package com.prod.goodweather.ui.fragment
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,15 +69,11 @@ class SearchResultBottomSheet : BottomSheetDialogFragment() {
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		Log.d("onViewCreated", "onViewCreated")
 		val parentView = binding.root.parent as View
 		val bottomSheetBehavior = BottomSheetBehavior.from(parentView)
 		bottomSheetBehavior.peekHeight = getSheetHeight()
 		binding.frameLayout.layoutParams = FrameLayout
 			.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getSheetHeight())
-
-		Log.d("onViewCreated", binding.frameLayout.height.toString())
-		Log.d("onViewCreated", binding.detailWeather.root.height.toString())
 		setAddress()
 		setRvAdapters()
 		setViewModelObserve()
