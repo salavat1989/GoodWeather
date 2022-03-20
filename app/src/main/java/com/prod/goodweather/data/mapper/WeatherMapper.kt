@@ -1,36 +1,25 @@
 package com.prod.goodweather.data.mapper
 
-import android.app.Application
 import android.location.Address
+import com.prod.goodweather.data.database.dbmodel.*
 import com.prod.goodweather.data.network.ApiFactory
 import com.prod.goodweather.data.network.model.WeatherDto
 import com.prod.goodweather.domain.entity.*
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class WeatherMapper @Inject constructor(
-	val application: Application,
+	private val timeConverter: UnixTimeConverter,
 ) {
 	fun mapWeatherDtoToEntity(dto: WeatherDto): Weather {
 		val temperature = String.format("%.1f", dto.current.temp)
-		var feelsLike = "- -"
-		var weatherDescription: String? = null
-		var iconUrl: String? = null
+		val feelsLike = String.format("%.1f", dto.current.feelsLike)
+		val weatherDescription = dto.current.weather[0].description.replaceFirstChar {
+			it.uppercaseChar()
+		}
+		val iconUrl = String.format(ApiFactory.IMAGE_URL_TEMPLATE, dto.current.weather[0].icon)
 		val listHourlyWeather: MutableList<HourlyWeather> = mutableListOf()
 		val listDailyWeather: MutableList<DailyWeather> = mutableListOf()
-		dto.current.let {
-			it.feelsLike?.let { feelsLike = String.format("%.1f", it) }
-			it.weather?.let {
-				it.get(0)?.let {
-					weatherDescription = it.description?.replaceFirstChar {
-						it.uppercaseChar()
-					}
-					iconUrl = it.icon?.let { String.format(ApiFactory.IMAGE_URL_TEMPLATE, it) }
-				}
-			}
-		}
-		dto.hourly?.let {
+		dto.hourly.let {
 			for (weather in it) {
 				if (listHourlyWeather.size < 24) {
 					listHourlyWeather.add(
@@ -39,7 +28,7 @@ class WeatherMapper @Inject constructor(
 				}
 			}
 		}
-		dto.daily?.let {
+		dto.daily.let {
 			for (weather in it) {
 				listDailyWeather.add(
 					mapDailyWeatherDtoToEntity(weather, dto.timezone ?: "UTC")
@@ -47,7 +36,6 @@ class WeatherMapper @Inject constructor(
 			}
 		}
 		return Weather(
-			cityName = null,
 			temperature = temperature,
 			feelsLike = feelsLike,
 			weatherDescription = weatherDescription,
@@ -57,47 +45,34 @@ class WeatherMapper @Inject constructor(
 		)
 	}
 
-	fun mapHourlyWeatherDtoToEntity(dto: WeatherDto.Hourly, timeZone: String): HourlyWeather {
+	private fun mapHourlyWeatherDtoToEntity(
+		dto: WeatherDto.Hourly,
+		timeZone: String,
+	): HourlyWeather {
 		return HourlyWeather(
 			unixTime = dto.dt,
-			forecastTime = convertUnixTimeToString(dto.dt, timeZone, "HH"),
+			forecastTime = timeConverter.convertUnixTimeToHour(dto.dt, timeZone),
 			temperature = String.format("%.0f", dto.temp),
-			iconURL = dto.weather?.get(0)?.icon?.let {
+			iconURL = dto.weather[0].icon.run {
 				String.format(ApiFactory.IMAGE_URL_TEMPLATE,
-					it)
+					this)
 			}
 		)
 	}
 
-	fun mapDailyWeatherDtoToEntity(dto: WeatherDto.Daily, timeZone: String): DailyWeather {
+	private fun mapDailyWeatherDtoToEntity(dto: WeatherDto.Daily, timeZone: String): DailyWeather {
 		return DailyWeather(
 			unixTime = dto.dt,
-			forecastTime = convertUnixTimeToString(dto.dt,
-				timeZone,
-				"EEEE").replaceFirstChar { it.uppercaseChar() },
+			forecastTime = timeConverter.convertUnixTimeToDay(dto.dt, timeZone),
 			temperatureMin = String.format("%.0f", dto.temp.min),
 			temperatureMax = String.format("%.0f", dto.temp.max),
-			iconURL = dto.weather?.get(0)?.icon?.let {
+			iconURL = dto.weather[0].icon.run {
 				String.format(ApiFactory.IMAGE_URL_TEMPLATE,
-					it)
+					this)
 			}
 		)
 	}
 
-	private fun convertUnixTimeToString(t: Long, timeZone: String, template: String): String {
-		val dateFormat = SimpleDateFormat(template)
-		val date = Date(t * 1000)
-		try {
-			dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone))
-		} catch (e: Exception) {
-		}
-		return dateFormat.format(date)
-	}
-
-	//    fun mapLocalityAddressToEntity(dto: LocalityAddressDto): AddressModel {
-//        val mainAddress = dto.locality ?: dto.subAdminArea ?: dto.adminArea ?: dto.countryName
-//        return AddressModel(mainAddress, dto.thoroughfare)
-//    }
 	fun mapAddressToAddressModel(address: Address): AddressModel {
 		val mainAddress =
 			address.locality ?: address.subAdminArea ?: address.adminArea ?: address.countryName
@@ -107,4 +82,126 @@ class WeatherMapper @Inject constructor(
 		val location = LocationModel(address.latitude, address.longitude)
 		return AddressModel(mainAddress, address.thoroughfare, addressLine, location)
 	}
+
+	fun mapAddressModelDBToAddressModel(db: AddressModelDb): AddressModel {
+		return AddressModel(
+			db.mainAddress,
+			db.subAddress,
+			"",
+			LocationModel(db.latitude, db.longitude)
+		)
+	}
+
+	fun mapWeatherDtoToAllDb(dto: WeatherDto, locationID: Long): AllWeatherDb {
+		val temperature = String.format("%.1f", dto.current.temp)
+		val feelsLike = String.format("%.1f", dto.current.feelsLike)
+		val weatherDescription = dto.current.weather[0].description.replaceFirstChar {
+			it.uppercaseChar()
+		}
+		val iconUrl = String.format(ApiFactory.IMAGE_URL_TEMPLATE, dto.current.weather[0].icon)
+		val listHourlyWeather: MutableList<HourlyWeatherDb> = mutableListOf()
+		val listDailyWeather: MutableList<DailyWeatherDb> = mutableListOf()
+		dto.hourly.let {
+			for (weather in it) {
+				if (listHourlyWeather.size < 24) {
+					listHourlyWeather.add(
+						mapHourlyWeatherDtoToDb(weather)
+					)
+				}
+			}
+		}
+		dto.daily.let {
+			for (weather in it) {
+				listDailyWeather.add(
+					mapDailyWeatherDtoToDb(weather)
+				)
+			}
+		}
+		val weatherDb = WeatherDb(
+			id = 0,
+			temperature = temperature,
+			feelsLike = feelsLike,
+			weatherDescription = weatherDescription,
+			iconUrl = iconUrl,
+			timezone = dto.timezone ?: "UTC",
+			addressModelId = locationID
+		)
+
+		return AllWeatherDb(
+			weatherDb,
+			listHourlyWeather,
+			listDailyWeather
+		)
+	}
+
+	private fun mapHourlyWeatherDtoToDb(dto: WeatherDto.Hourly): HourlyWeatherDb {
+		return HourlyWeatherDb(
+			id = 0,
+			unixTime = dto.dt,
+			temperature = String.format("%.0f", dto.temp),
+			iconURL = dto.weather[0].icon.run {
+				String.format(ApiFactory.IMAGE_URL_TEMPLATE,
+					this)
+			},
+			weatherId = 0
+		)
+	}
+
+	private fun mapDailyWeatherDtoToDb(dto: WeatherDto.Daily): DailyWeatherDb {
+		return DailyWeatherDb(
+			id = 0,
+			unixTime = dto.dt,
+			temperatureMin = String.format("%.0f", dto.temp.min),
+			temperatureMax = String.format("%.0f", dto.temp.max),
+			iconURL = dto.weather[0].icon.run {
+				String.format(ApiFactory.IMAGE_URL_TEMPLATE,
+					this)
+			},
+			weatherId = 0
+		)
+	}
+
+	fun mapAllWeatherDbToEntity(db: AllWeatherDb): Weather {
+		val hourlyWeather =
+			mapListHourlyWeatherDbToEntity(db.listHourlyWeatherDb, db.weatherDb.timezone)
+		val dailyWeather =
+			mapListDailyWeatherDbToEntity(db.listDailyWeatherDb, db.weatherDb.timezone)
+		return Weather(
+			db.weatherDb.temperature,
+			db.weatherDb.feelsLike,
+			db.weatherDb.weatherDescription,
+			db.weatherDb.iconUrl,
+			hourlyWeather,
+			dailyWeather
+		)
+	}
+
+	private fun mapHourlyWeatherDbToEntity(db: HourlyWeatherDb, timeZone: String): HourlyWeather {
+		return HourlyWeather(
+			db.unixTime,
+			timeConverter.convertUnixTimeToHour(db.unixTime, timeZone),
+			db.temperature,
+			db.iconURL
+		)
+	}
+
+	private fun mapListHourlyWeatherDbToEntity(
+		listDb: List<HourlyWeatherDb>,
+		timeZone: String,
+	): List<HourlyWeather> = listDb.map { mapHourlyWeatherDbToEntity(it, timeZone) }
+
+	private fun mapDailyWeatherDbToEntity(db: DailyWeatherDb, timeZone: String): DailyWeather {
+		return DailyWeather(
+			db.unixTime,
+			timeConverter.convertUnixTimeToDay(db.unixTime, timeZone),
+			db.temperatureMin,
+			db.temperatureMax,
+			db.iconURL
+		)
+	}
+
+	private fun mapListDailyWeatherDbToEntity(
+		listDb: List<DailyWeatherDb>,
+		timeZone: String,
+	): List<DailyWeather> = listDb.map { mapDailyWeatherDbToEntity(it, timeZone) }
 }

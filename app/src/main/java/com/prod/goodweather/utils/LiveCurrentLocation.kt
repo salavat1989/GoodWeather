@@ -60,8 +60,8 @@ class LiveCurrentLocation @Inject constructor(
 
     companion object {
         val locationRequest: LocationRequest = LocationRequest.create().apply {
-            interval = 6000
-            fastestInterval = 3000
+            interval = 120000
+            fastestInterval = 60000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }

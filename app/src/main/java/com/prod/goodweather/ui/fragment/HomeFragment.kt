@@ -16,14 +16,20 @@ import com.prod.goodweather.ui.adapter.DailyWeatherAdapter
 import com.prod.goodweather.ui.adapter.HourlyWeatherAdapter
 import com.prod.goodweather.ui.viewModel.HomeFragmentViewModel
 import com.prod.goodweather.ui.viewModel.ViewModelFactory
+import com.prod.goodweather.utils.LiveCurrentLocation
+import com.prod.goodweather.utils.checkAccessFineLocationPermission
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
 	@Inject
 	lateinit var viewModelFactory: ViewModelFactory
 
-	val component by lazy {
+	private val component by lazy {
 		(requireActivity().application as GoodWeatherApp).component
 			.getFragmentComponentFactory().create(null)
 	}
@@ -34,6 +40,9 @@ class HomeFragment : Fragment() {
 	@Inject
 	lateinit var dailyWeatherAdapter: DailyWeatherAdapter
 
+	@Inject
+	lateinit var currentLocation: LiveCurrentLocation
+
 
 	private val viewModel: HomeFragmentViewModel by lazy {
 		ViewModelProvider(this, viewModelFactory)[HomeFragmentViewModel::class.java]
@@ -43,6 +52,7 @@ class HomeFragment : Fragment() {
 	private val binding
 		get() = _binding ?: throw RuntimeException("FragmentHomeBinding is null")
 
+	private val scope = CoroutineScope(Dispatchers.Main)
 	override fun onAttach(context: Context) {
 		component.inject(this)
 		super.onAttach(context)
@@ -60,6 +70,7 @@ class HomeFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		setRvAdapters()
 		setViewModelObserve()
+		checkAndWaitPermission()
 		super.onViewCreated(view, savedInstanceState)
 	}
 
@@ -72,26 +83,32 @@ class HomeFragment : Fragment() {
 				}
 			rvDailyWeather.adapter = dailyWeatherAdapter
 		}
-
 	}
 
 	private fun setViewModelObserve() {
 		viewModel.weather.observe(viewLifecycleOwner) {
-			with(binding.detailWeather) {
-				tvTemperature.text = "${it.temperature}\u00B0"
-				setTextAndVisibility(
-					tvWeatherDescription,
-					it.weatherDescription
-				)
-				setTextAndVisibility(
-					tvFeelsLike,
-					String.format(requireActivity().getString(R.string.feels_like),
-						it.feelsLike + "\u00B0")
-				)
-				Picasso.get().load(it.iconUrl).into(imWeatherIcon)
-				hourlyWeatherAdapter.submitList(it.listHourlyWeather)
-				dailyWeatherAdapter.submitList(it.listDailyWeather)
-				viewModel.address.observe(viewLifecycleOwner) {
+			it?.let {
+				with(binding.detailWeather) {
+					tvTemperature.text = "${it.temperature}\u00B0"
+					setTextAndVisibility(
+						tvWeatherDescription,
+						it.weatherDescription
+					)
+					setTextAndVisibility(
+						tvFeelsLike,
+						String.format(requireActivity().getString(R.string.feels_like),
+							it.feelsLike + "\u00B0")
+					)
+					Picasso.get().load(it.iconUrl).into(imWeatherIcon)
+					hourlyWeatherAdapter.submitList(it.listHourlyWeather)
+					dailyWeatherAdapter.submitList(it.listDailyWeather)
+
+				}
+			}
+		}
+		viewModel.address.observe(viewLifecycleOwner) {
+			it?.let {
+				with(binding.detailWeather) {
 					tvCityName.text = it.mainAddress
 					setTextAndVisibility(
 						tvAddress,
@@ -108,6 +125,23 @@ class HomeFragment : Fragment() {
 		} else {
 			view.text = text
 			view.visibility = View.VISIBLE
+		}
+	}
+
+	private fun checkAndWaitPermission() {
+		if (requireActivity().checkAccessFineLocationPermission()) {
+			observeLocationUpdate()
+		} else {
+			scope.launch {
+				delay(3000)
+				checkAndWaitPermission()
+			}
+		}
+	}
+
+	private fun observeLocationUpdate() {
+		currentLocation.observe(viewLifecycleOwner) {
+			viewModel.locationChanged(it)
 		}
 	}
 

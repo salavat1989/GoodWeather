@@ -9,9 +9,9 @@ data class WeatherDto(
     @SerializedName("current")
     val current: Current,
     @SerializedName("daily")
-    val daily: List<Daily>?,
+    val daily: List<Daily>,
     @SerializedName("hourly")
-    val hourly: List<Hourly>?,
+    val hourly: List<Hourly>,
     @SerializedName("lat")
     val lat: Double?, // 51.5098
     @SerializedName("lon")
@@ -19,9 +19,9 @@ data class WeatherDto(
     @SerializedName("timezone")
     val timezone: String?, // Europe/Saratov
     @SerializedName("timezone_offset")
-    val timezoneOffset: Int? // 14400
+    val timezoneOffset: Int?, // 14400
 ) {
-    data class Alert(
+	data class Alert(
         @SerializedName("description")
         val description: String?,
         @SerializedName("end")
@@ -33,10 +33,10 @@ data class WeatherDto(
         @SerializedName("start")
         val start: Long?, // 1646506800
         @SerializedName("tags")
-        val tags: List<String?>?
+        val tags: List<String?>?,
     )
 
-    data class Current(
+	data class Current(
         @SerializedName("clouds")
         val clouds: Double?, // 100
         @SerializedName("dew_point")
@@ -44,7 +44,7 @@ data class WeatherDto(
         @SerializedName("dt")
         val dt: Int?, // 1646510445
         @SerializedName("feels_like")
-        val feelsLike: Double?, // -9.86
+        val feelsLike: Double, // -9.86
         @SerializedName("humidity")
         val humidity: Double?, // 84
         @SerializedName("pressure")
@@ -62,32 +62,32 @@ data class WeatherDto(
         @SerializedName("visibility")
         val visibility: Double?, // 10000
         @SerializedName("weather")
-        val weather: List<Weather?>?,
+        val weather: List<Weather>,
         @SerializedName("wind_deg")
         val windDeg: Double?, // 349
         @SerializedName("wind_gust")
         val windGust: Double?, // 15.1
         @SerializedName("wind_speed")
-        val windSpeed: Double? // 9.18
+        val windSpeed: Double?, // 9.18
     ) {
-        data class Snow(
+		data class Snow(
             @SerializedName("1h")
-            val h: Double? // 0.15
+            val h: Double?, // 0.15
         )
 
-        data class Weather(
+		data class Weather(
             @SerializedName("description")
-            val description: String?, // light snow
+            val description: String, // light snow
             @SerializedName("icon")
-            val icon: String?, // 13n
+            val icon: String, // 13n
             @SerializedName("id")
             val id: Int?, // 600
             @SerializedName("main")
-            val main: String? // Snow
+            val main: String?, // Snow
         )
-    }
+	}
 
-    data class Daily(
+	data class Daily(
         @SerializedName("clouds")
         val clouds: Int?, // 10
         @SerializedName("dew_point")
@@ -95,7 +95,7 @@ data class WeatherDto(
         @SerializedName("dt")
         val dt: Long, // 1646557200
         @SerializedName("feels_like")
-        val feelsLike: FeelsLike?,
+        val feelsLike: FeelsLike,
         @SerializedName("humidity")
         val humidity: Double?, // 81
         @SerializedName("moon_phase")
@@ -119,15 +119,15 @@ data class WeatherDto(
         @SerializedName("uvi")
         val uvi: Double?, // 2.88
         @SerializedName("weather")
-        val weather: List<Weather?>?,
+        val weather: List<Weather>,
         @SerializedName("wind_deg")
         val windDeg: Double?, // 349
         @SerializedName("wind_gust")
         val windGust: Double?, // 15.1
         @SerializedName("wind_speed")
-        val windSpeed: Double? // 9.18
+        val windSpeed: Double?, // 9.18
     ) {
-        data class FeelsLike(
+		data class FeelsLike(
             @SerializedName("day")
             val day: Double?, // -15.5
             @SerializedName("eve")
@@ -135,10 +135,10 @@ data class WeatherDto(
             @SerializedName("morn")
             val morn: Double?, // -16.91
             @SerializedName("night")
-            val night: Double? // -21.11
+            val night: Double?, // -21.11
         )
 
-        data class Temp(
+		data class Temp(
             @SerializedName("day")
             val day: Double?, // -8.5
             @SerializedName("eve")
@@ -150,22 +150,22 @@ data class WeatherDto(
             @SerializedName("morn")
             val morn: Double?, // -9.91
             @SerializedName("night")
-            val night: Double? // -14.33
+            val night: Double?, // -14.33
         )
 
-        data class Weather(
+		data class Weather(
             @SerializedName("description")
             val description: String?, // light snow
             @SerializedName("icon")
-            val icon: String?, // 13d
+            val icon: String, // 13d
             @SerializedName("id")
             val id: Int?, // 600
             @SerializedName("main")
-            val main: String? // Snow
+            val main: String?, // Snow
         )
-    }
+	}
 
-    data class Hourly(
+	data class Hourly(
         @SerializedName("clouds")
         val clouds: Double?, // 100
         @SerializedName("dew_point")
@@ -173,7 +173,7 @@ data class WeatherDto(
         @SerializedName("dt")
         val dt: Long, // 1646510400
         @SerializedName("feels_like")
-        val feelsLike: Double?, // -9.86
+        val feelsLike: Double, // -9.86
         @SerializedName("humidity")
         val humidity: Double?, // 84
         @SerializedName("pop")
@@ -189,28 +189,28 @@ data class WeatherDto(
         @SerializedName("visibility")
         val visibility: Double?, // 10000
         @SerializedName("weather")
-        val weather: List<Weather?>?,
+        val weather: List<Weather>,
         @SerializedName("wind_deg")
         val windDeg: Double?, // 349
         @SerializedName("wind_gust")
         val windGust: Double?, // 15.1
         @SerializedName("wind_speed")
-        val windSpeed: Double? // 9.18
+        val windSpeed: Double?, // 9.18
     ) {
-        data class Snow(
+		data class Snow(
             @SerializedName("1h")
-            val h: Double? // 0.15
+            val h: Double?, // 0.15
         )
 
-        data class Weather(
+		data class Weather(
             @SerializedName("description")
             val description: String?, // light snow
             @SerializedName("icon")
-            val icon: String?, // 13n
+            val icon: String, // 13n
             @SerializedName("id")
             val id: Int?, // 600
             @SerializedName("main")
-            val main: String? // Snow
+            val main: String?, // Snow
         )
-    }
+	}
 }
